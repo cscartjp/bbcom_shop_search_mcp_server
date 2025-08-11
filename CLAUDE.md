@@ -2,6 +2,56 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL DATABASE RULES - 絶対に守ること
+
+### マイグレーション禁止事項
+
+**このプロジェクトから本番データベースへのマイグレーションは絶対に禁止です。**
+
+- ❌ **絶対にやってはいけないこと**:
+  - `npx prisma migrate deploy` を本番環境に対して実行
+  - `npx prisma migrate dev` を本番データベースURLで実行
+  - `npx prisma db push` を本番環境に対して実行
+  - 本番データベースのスキーマを上書きする操作全般
+
+- ✅ **やるべきこと**:
+  - 本番データベースの変更が必要な場合は、必ず管理者に確認
+  - スキーマの同期は `npx prisma db pull` で本番から取得する方向のみ
+  - ローカル開発環境でのみマイグレーションを実行
+
+### スキーマ同期の正しい手順
+
+1. **本番スキーマの取得** (READ-ONLY):
+   ```bash
+   npx prisma db pull --force  # 本番からスキーマを取得
+   npx prisma generate         # Prismaクライアントを生成
+   ```
+
+2. **ローカル開発のみ**:
+   ```bash
+   # ローカル環境のDATABASE_URLを確認してから
+   npx prisma migrate dev      # ローカルでのみ実行可能
+   ```
+
+**理由**: 本番データベースは他のシステムと共有されており、このプロジェクト独自のマイグレーションを適用すると既存のデータや他のアプリケーションが破損する可能性があります。
+
+## Development Tools
+
+### Serena MCP Integration
+
+このプロジェクトの開発では、Serena MCPツールを活用してください。Serena MCPは以下の機能を提供します：
+
+- **シンボルベースのコード解析と編集**: `find_symbol`、`replace_symbol_body`などのツールを使用して、コード構造を理解し、精密な編集を行います
+- **効率的なコード検索**: `search_for_pattern`、`get_symbols_overview`で必要な情報を素早く見つけます
+- **メモリ管理**: プロジェクト固有の情報を`write_memory`、`read_memory`で保存・参照します
+
+開発時は以下のアプローチを推奨：
+
+1. **コード変更前**: `get_symbols_overview`でファイル構造を理解
+2. **実装時**: `replace_symbol_body`や`insert_after_symbol`でシンボル単位の編集
+3. **小規模な変更**: `replace_regex`で特定行の修正
+4. **依存関係確認**: `find_referencing_symbols`で影響範囲を確認
+
 ## Project Overview
 
 This is the BBcom Shop Search MCP Server for Miyakojima, Okinawa. It provides a Model Context Protocol (MCP) compliant server that enables AI assistants to search and retrieve information about shops, restaurants, and job listings in Miyakojima through natural language queries.

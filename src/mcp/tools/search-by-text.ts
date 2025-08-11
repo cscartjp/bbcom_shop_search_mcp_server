@@ -17,7 +17,7 @@ export async function searchByText(
   } = params;
 
   // Build where clause for text search
-  const searchConditions: Prisma.CitadelaItemWhereInput[] = [];
+  const searchConditions: Prisma.citadela_itemsWhereInput[] = [];
   
   if (searchIn.includes('title')) {
     searchConditions.push({
@@ -55,7 +55,7 @@ export async function searchByText(
     });
   }
 
-  const where: Prisma.CitadelaItemWhereInput = {
+  const where: Prisma.citadela_itemsWhereInput = {
     status: 'publish',
     OR: searchConditions.length > 0 ? searchConditions : undefined
   };
@@ -99,7 +99,7 @@ export async function searchByText(
 
     const items = await prisma.$queryRawUnsafe<any[]>(`
       SELECT 
-        "item_id" as "itemId",
+        item_id,
         title,
         subtitle,
         content,
@@ -109,13 +109,12 @@ export async function searchByText(
         categories,
         tags,
         status,
-        "openingHours",
-        "phoneNumber",
-        "telephoneNumber",
+        opening_hours,
+        telephone,
         email,
-        web,
-        "created_at" as "createdAt",
-        "updated_at" as "updatedAt",
+        web_url,
+        created_at,
+        updated_at,
         CASE 
           WHEN location IS NOT NULL THEN 
             ST_Distance(
@@ -151,7 +150,7 @@ export async function searchByText(
       OFFSET $5
     `, searchPattern, userLng, userLat, limit, offset);
 
-    const total = await prisma.citadelaItem.count({ where });
+    const total = await prisma.citadela_items.count({ where });
 
     return {
       items: items.map(item => ({
@@ -168,17 +167,17 @@ export async function searchByText(
 
   // Regular query without distance calculation
   const [items, total] = await Promise.all([
-    prisma.citadelaItem.findMany({
+    prisma.citadela_items.findMany({
       where,
       orderBy: [
         // Prioritize title matches
         { title: 'asc' },
-        { updatedAt: 'desc' }
+        { updated_at: 'desc' }
       ],
       take: limit,
       skip: offset,
       select: {
-        itemId: true,
+        item_id: true,
         title: true,
         subtitle: true,
         content: true,
@@ -188,16 +187,15 @@ export async function searchByText(
         categories: true,
         tags: true,
         status: true,
-        openingHours: true,
-        phoneNumber: true,
-        telephoneNumber: true,
+        opening_hours: true,
+        telephone: true,
         email: true,
-        web: true,
-        createdAt: true,
-        updatedAt: true
+        web_url: true,
+        created_at: true,
+        updated_at: true
       }
     }),
-    prisma.citadelaItem.count({ where })
+    prisma.citadela_items.count({ where })
   ]);
 
   // Add search snippets

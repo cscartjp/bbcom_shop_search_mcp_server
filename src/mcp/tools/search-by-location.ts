@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { SearchByLocationParams } from '../schemas/index.js';
 
 export async function searchByLocation(
@@ -19,7 +19,6 @@ export async function searchByLocation(
   const radiusMeters = radiusKm * 1000;
 
   // Build the query with PostGIS spatial functions
-  let queryParts: string[] = [];
   let whereConditions: string[] = ['status = $1'];
   let queryParams: any[] = ['publish'];
   let paramCounter = 2;
@@ -47,12 +46,8 @@ export async function searchByLocation(
 
   // Check if place is open (simplified - would need proper time handling)
   if (onlyOpen) {
-    const now = new Date();
-    const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-    const currentTime = now.toTimeString().slice(0, 5);
-    
     // This is a simplified check - in production you'd parse opening_hours JSON properly
-    whereConditions.push(`"openingHours" IS NOT NULL`);
+    whereConditions.push(`opening_hours IS NOT NULL`);
   }
 
   const whereClause = whereConditions.join(' AND ');
@@ -60,7 +55,7 @@ export async function searchByLocation(
   // Execute the spatial query
   const items = await prisma.$queryRawUnsafe<any[]>(`
     SELECT 
-      "item_id" as "itemId",
+      item_id,
       title,
       subtitle,
       address,
@@ -69,13 +64,12 @@ export async function searchByLocation(
       categories,
       tags,
       status,
-      "openingHours",
-      "phoneNumber",
-      "telephoneNumber",
+      opening_hours,
+      telephone,
       email,
-      web,
-      "created_at" as "createdAt",
-      "updated_at" as "updatedAt",
+      web_url,
+      created_at,
+      updated_at,
       ST_Distance(
         location::geography,
         ST_MakePoint($2, $3)::geography

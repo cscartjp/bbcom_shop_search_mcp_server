@@ -16,7 +16,7 @@ export async function searchByTags(
   } = params;
 
   // Build where clause
-  const where: Prisma.CitadelaItemWhereInput = {
+  const where: Prisma.citadela_itemsWhereInput = {
     status: 'publish'
   };
 
@@ -52,7 +52,7 @@ export async function searchByTags(
 
     const items = await prisma.$queryRaw<any[]>`
       SELECT 
-        "item_id" as "itemId",
+        item_id,
         title,
         subtitle,
         content,
@@ -62,14 +62,12 @@ export async function searchByTags(
         categories,
         tags,
         status,
-        "openingHours",
-        "phoneNumber",
-        "telephoneNumber",
+        opening_hours,
+        telephone,
         email,
-        web,
-        features,
-        "created_at" as "createdAt",
-        "updated_at" as "updatedAt",
+        web_url,
+        created_at,
+        updated_at,
         CASE 
           WHEN location IS NOT NULL THEN 
             ST_Distance(
@@ -96,7 +94,7 @@ export async function searchByTags(
       OFFSET ${offset}
     `;
 
-    const total = await prisma.citadelaItem.count({ where });
+    const total = await prisma.citadela_items.count({ where });
 
     return {
       items: items.map(item => ({
@@ -113,13 +111,13 @@ export async function searchByTags(
 
   // Regular query without distance calculation
   const [items, total] = await Promise.all([
-    prisma.citadelaItem.findMany({
+    prisma.citadela_items.findMany({
       where,
-      orderBy: { updatedAt: 'desc' },
+      orderBy: { updated_at: 'desc' },
       take: limit,
       skip: offset,
       select: {
-        itemId: true,
+        item_id: true,
         title: true,
         subtitle: true,
         content: true,
@@ -129,17 +127,15 @@ export async function searchByTags(
         categories: true,
         tags: true,
         status: true,
-        openingHours: true,
-        phoneNumber: true,
-        telephoneNumber: true,
+        opening_hours: true,
+        telephone: true,
         email: true,
-        web: true,
-        features: true,
-        createdAt: true,
-        updatedAt: true
+        web_url: true,
+        created_at: true,
+        updated_at: true
       }
     }),
-    prisma.citadelaItem.count({ where })
+    prisma.citadela_items.count({ where })
   ]);
 
   // Add matched tags info

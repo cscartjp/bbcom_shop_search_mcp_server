@@ -9,70 +9,66 @@ datasource db {
   extensions = [postgis]
 }
 
-model CitadelaItem {
-  id                Int      @id @default(autoincrement())
-  itemId            Int      @unique @map("item_id")
-  slug              String   @unique
-  link              String?
-
-  // Content fields
-  title             String
-  subtitle          String?
-  content           String?  @db.Text
-  status            String   @default("publish")
-  author            Int      @default(1)
-
-  // Location fields
-  latitude          Float?
-  longitude         Float?
-  location          Unsupported("geography(Point, 4326)")?
-  address           String?
-
-  // Categorization
-  categories        String[]
-  tags              String[]
-
-  // Metadata
-  featuredImage     Int?
-  galleryImages     Int[]
-  openingHours      Json?
-  phoneNumber       String?
-  telephoneNumber   String?
-  email             String?
-  showEmail         Boolean  @default(true)
-  web               String?
-  showWeb           Boolean  @default(true)
-  socialIcons       Json?
-  features          String[]
-  customFields      Json?
-
-  // Timestamps
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
-  publishedAt       DateTime @default(now()) @map("published_at")
+model citadela_items {
+  id                 Int                       @id @default(autoincrement())
+  item_id            Int                       @unique
+  slug               String                    @unique
+  title              String
+  subtitle           String?
+  content            String?
+  status             String                    @default("publish")
+  created_at         DateTime
+  updated_at         DateTime
+  address            String?
+  latitude           Float?
+  longitude          Float?
+  location           Unsupported("geography")?
+  map_enabled        Boolean                   @default(false)
+  streetview_enabled Boolean                   @default(false)
+  swheading          Float?
+  swpitch            Float?
+  swzoom             Float?
+  telephone          String?
+  email              String?
+  show_email         Boolean                   @default(false)
+  use_contact_form   Boolean                   @default(false)
+  web_url            String?
+  web_url_label      String?
+  show_opening_hours Boolean                   @default(false)
+  opening_hours      Json?
+  featured           Boolean                   @default(false)
+  categories         String[]
+  tags               String[]
+  tax_map            String?
 
   @@index([categories], type: Gin)
+  @@index([status])
   @@index([tags], type: Gin)
-  @@index([location], type: Gist)
-  @@map("citadela_items")
+  @@index([updated_at(sort: Desc)])
 }
 
-model Landmark {
-  id           Int      @id @default(autoincrement())
-  name         String   @unique
-  nameKana     String?  @map("name_kana")
-  nameEnglish  String?  @map("name_english")
+model landmarks {
+  id           Int                       @id @default(autoincrement())
+  name         String                    @unique
+  name_kana    String?
+  name_english String?
   category     String
   latitude     Float
   longitude    Float
-  location     Unsupported("geography(Point, 4326)")?
   address      String?
   description  String?
-
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  location     Unsupported("geography")?
+  created_at   DateTime                  @default(now())
+  updated_at   DateTime
 
   @@index([category])
-  @@index([location], type: Gist)
-  @@map("landmarks")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
 }

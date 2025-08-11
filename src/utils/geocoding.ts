@@ -54,7 +54,7 @@ async function geocodeWithGoogle(location: string, apiKey: string): Promise<Geoc
   
   try {
     const response = await fetch(`${baseUrl}?${params}`);
-    const data = await response.json();
+    const data: any = await response.json();
     
     if (data.status === 'OK' && data.results && data.results.length > 0) {
       const result = data.results[0];

@@ -7,9 +7,9 @@ export async function getItemById(
 ) {
   const { itemId } = params;
 
-  const item = await prisma.citadelaItem.findUnique({
+  const item = await prisma.citadela_items.findUnique({
     where: {
-      itemId: itemId
+      item_id: itemId
     }
   });
 
@@ -18,48 +18,28 @@ export async function getItemById(
   }
 
   // Parse opening hours if it's a JSON string
-  let parsedOpeningHours = item.openingHours;
-  if (typeof item.openingHours === 'string') {
+  let parsedOpeningHours = item.opening_hours;
+  if (typeof item.opening_hours === 'string') {
     try {
-      parsedOpeningHours = JSON.parse(item.openingHours);
+      parsedOpeningHours = JSON.parse(item.opening_hours);
     } catch (error) {
       console.error('Error parsing opening hours:', error);
     }
   }
 
-  // Parse social icons if it's a JSON string
-  let parsedSocialIcons = item.socialIcons;
-  if (typeof item.socialIcons === 'string') {
-    try {
-      parsedSocialIcons = JSON.parse(item.socialIcons);
-    } catch (error) {
-      console.error('Error parsing social icons:', error);
-    }
-  }
 
-  // Parse custom fields if it's a JSON string
-  let parsedCustomFields = item.customFields;
-  if (typeof item.customFields === 'string') {
-    try {
-      parsedCustomFields = JSON.parse(item.customFields);
-    } catch (error) {
-      console.error('Error parsing custom fields:', error);
-    }
-  }
 
   // Check if currently open
   const isOpen = checkIfOpen(parsedOpeningHours);
 
   // Format the response
   return {
-    itemId: item.itemId,
+    itemId: item.item_id,
     slug: item.slug,
-    link: item.link,
     title: item.title,
     subtitle: item.subtitle,
     content: item.content,
     status: item.status,
-    author: item.author,
     location: {
       latitude: item.latitude,
       longitude: item.longitude,
@@ -67,27 +47,28 @@ export async function getItemById(
     },
     categories: item.categories,
     tags: item.tags,
-    media: {
-      featuredImage: item.featuredImage,
-      galleryImages: item.galleryImages
-    },
     contact: {
-      phoneNumber: item.phoneNumber,
-      telephoneNumber: item.telephoneNumber,
-      email: item.showEmail ? item.email : null,
-      web: item.showWeb ? item.web : null
+      telephone: item.telephone,
+      email: item.show_email ? item.email : null,
+      web: item.web_url,
+      webLabel: item.web_url_label
     },
     businessInfo: {
       openingHours: parsedOpeningHours,
+      showOpeningHours: item.show_opening_hours,
       isOpen: isOpen,
-      features: item.features
+      mapEnabled: item.map_enabled,
+      streetviewEnabled: item.streetview_enabled,
+      swheading: item.swheading,
+      swpitch: item.swpitch,
+      swzoom: item.swzoom
     },
-    socialMedia: parsedSocialIcons,
-    customFields: parsedCustomFields,
+    featured: item.featured,
+    useContactForm: item.use_contact_form,
+    taxMap: item.tax_map,
     timestamps: {
-      created: item.createdAt,
-      updated: item.updatedAt,
-      published: item.publishedAt
+      created: item.created_at,
+      updated: item.updated_at
     }
   };
 }

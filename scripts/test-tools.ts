@@ -72,13 +72,13 @@ async function testTools() {
     // Test 5: Get Item by ID
     console.log('5️⃣ Testing getItemById...');
     // First get a valid item ID
-    const sampleItem = await prisma.citadelaItem.findFirst({
+    const sampleItem = await prisma.citadela_items.findFirst({
       where: { status: 'publish' }
     });
     
     if (sampleItem) {
       const itemDetail = await getItemById(prisma, {
-        itemId: sampleItem.itemId
+        itemId: sampleItem.item_id
       });
       console.log(`   Retrieved item: ${itemDetail.title}`);
       console.log(`   Categories: ${itemDetail.categories.join(', ')}`);

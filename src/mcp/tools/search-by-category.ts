@@ -18,7 +18,7 @@ export async function searchByCategory(
   } = params;
 
   // Build where clause
-  const where: Prisma.CitadelaItemWhereInput = {};
+  const where: Prisma.citadela_itemsWhereInput = {};
   
   if (status !== 'all') {
     where.status = status;
@@ -35,13 +35,13 @@ export async function searchByCategory(
   }
 
   // Build orderBy clause
-  let orderBy: Prisma.CitadelaItemOrderByWithRelationInput | Prisma.CitadelaItemOrderByWithRelationInput[] = {};
+  let orderBy: Prisma.citadela_itemsOrderByWithRelationInput | Prisma.citadela_itemsOrderByWithRelationInput[] = {};
   
   if (sortBy === 'distance' && userLat && userLng) {
     // For distance sorting, we'll need to use raw query
     const items = await prisma.$queryRaw<any[]>`
       SELECT 
-        "item_id" as "itemId",
+        item_id,
         title,
         subtitle,
         address,
@@ -50,13 +50,12 @@ export async function searchByCategory(
         categories,
         tags,
         status,
-        "openingHours",
-        "phoneNumber",
-        "telephoneNumber",
+        opening_hours,
+        telephone,
         email,
-        web,
-        "created_at" as "createdAt",
-        "updated_at" as "updatedAt",
+        web_url,
+        created_at,
+        updated_at,
         CASE 
           WHEN location IS NOT NULL THEN 
             ST_Distance(
@@ -82,7 +81,7 @@ export async function searchByCategory(
       OFFSET ${offset}
     `;
     
-    const total = await prisma.citadelaItem.count({ where });
+    const total = await prisma.citadela_items.count({ where });
     
     return {
       items: items.map(item => ({
@@ -96,28 +95,28 @@ export async function searchByCategory(
     // Regular sorting
     switch (sortBy) {
       case 'created':
-        orderBy = { createdAt: order };
+        orderBy = { created_at: order };
         break;
       case 'updated':
-        orderBy = { updatedAt: order };
+        orderBy = { updated_at: order };
         break;
       case 'title':
         orderBy = { title: order };
         break;
       default:
-        orderBy = { updatedAt: 'desc' };
+        orderBy = { updated_at: 'desc' };
     }
   }
 
   // Execute query
   const [items, total] = await Promise.all([
-    prisma.citadelaItem.findMany({
+    prisma.citadela_items.findMany({
       where,
       orderBy,
       take: limit,
       skip: offset,
       select: {
-        itemId: true,
+        item_id: true,
         title: true,
         subtitle: true,
         address: true,
@@ -126,16 +125,15 @@ export async function searchByCategory(
         categories: true,
         tags: true,
         status: true,
-        openingHours: true,
-        phoneNumber: true,
-        telephoneNumber: true,
+        opening_hours: true,
+        telephone: true,
         email: true,
-        web: true,
-        createdAt: true,
-        updatedAt: true
+        web_url: true,
+        created_at: true,
+        updated_at: true
       }
     }),
-    prisma.citadelaItem.count({ where })
+    prisma.citadela_items.count({ where })
   ]);
 
   // Calculate distances if user location provided

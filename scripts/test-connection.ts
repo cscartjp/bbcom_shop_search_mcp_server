@@ -23,7 +23,7 @@ async function testConnection() {
     console.log(`✅ PostGIS installed: ${postgisCheck[0].version}`);
     
     // Count items in database
-    const itemCount = await prisma.citadelaItem.count();
+    const itemCount = await prisma.citadela_items.count();
     console.log(`✅ Total items in database: ${itemCount}`);
     
     // Get categories summary
@@ -49,7 +49,7 @@ async function testConnection() {
     console.log(`\n📍 Items with location data: ${spatialTest[0].count}`);
     
     // Get sample item
-    const sampleItem = await prisma.citadelaItem.findFirst({
+    const sampleItem = await prisma.citadela_items.findFirst({
       where: {
         latitude: { not: null },
         longitude: { not: null }
@@ -58,7 +58,7 @@ async function testConnection() {
     
     if (sampleItem) {
       console.log('\n📝 Sample item:');
-      console.log(`  - ID: ${sampleItem.itemId}`);
+      console.log(`  - ID: ${sampleItem.item_id}`);
       console.log(`  - Title: ${sampleItem.title}`);
       console.log(`  - Location: ${sampleItem.latitude}, ${sampleItem.longitude}`);
       console.log(`  - Categories: ${sampleItem.categories.join(', ')}`);
