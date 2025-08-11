@@ -11,10 +11,10 @@
   "icon": "icon.png",
   "server": {
     "type": "node",
-    "entry_point": "dist/server-bundled.js",
+    "entry_point": "dist/server-simple.cjs",
     "mcp_config": {
       "command": "node",
-      "args": ["dist/server-bundled.js"],
+      "args": ["dist/server-simple.cjs"],
       "env": {}
     }
   },

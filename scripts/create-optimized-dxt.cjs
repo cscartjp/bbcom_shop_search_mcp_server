@@ -27,7 +27,7 @@ async function createOptimizedDXT() {
   // 必要なファイルのみを追加
   archive.file('manifest.json', { name: 'manifest.json' });
   archive.file('icon.png', { name: 'icon.png' });
-  archive.file('dist/server-bundled.js', { name: 'dist/server-bundled.js' });
+  archive.file('dist/server-bundled.cjs', { name: 'dist/server-bundled.cjs' });
   
   // Prismaスキーマとクライアント（必須）
   archive.directory('prisma/', 'prisma/', {

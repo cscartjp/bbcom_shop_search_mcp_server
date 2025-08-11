@@ -11,7 +11,8 @@
       "mcp__context7__resolve-library-id",
       "WebFetch(domain:www.anthropic.com)",
       "mcp__serena__create_text_file",
-      "mcp__mcp-gemini-cli__googleSearch"
+      "mcp__mcp-gemini-cli__googleSearch",
+      "WebFetch(domain:modelcontextprotocol.io)"
     ],
     "deny": []
   }

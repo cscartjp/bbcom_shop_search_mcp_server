@@ -1,0 +1,9 @@
+2025-08-11T04:44:53.334Z [bbcom-miyakojima-search] [info] Initializing server... { metadata: undefined }
+2025-08-11T04:44:53.370Z [bbcom-miyakojima-search] [info] Using built-in Node.js for MCP server: bbcom-miyakojima-search { metadata: undefined }
+2025-08-11T04:44:53.402Z [bbcom-miyakojima-search] [info] Server started and connected successfully { metadata: undefined }
+2025-08-11T04:44:53.402Z [bbcom-miyakojima-search] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+2025-08-11T04:44:53.507Z [bbcom-miyakojima-search] [info] Server transport closed { metadata: undefined }
+2025-08-11T04:44:53.507Z [bbcom-miyakojima-search] [info] Client transport closed { metadata: undefined }
+2025-08-11T04:44:53.507Z [bbcom-miyakojima-search] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-11T04:44:53.507Z [bbcom-miyakojima-search] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-11T04:44:53.507Z [bbcom-miyakojima-search] [info] Client transport closed { metadata: undefined }
