@@ -1,0 +1,31 @@
+{
+  "dxt_version": "0.1.0",
+  "name": "bbcom-miyakojima-search",
+  "version": "1.0.0",
+  "description": "宮古島のお店・レストラン・求人情報を検索するMCPサーバー",
+  "author": {
+    "name": "BBcom",
+    "email": "contact@bbcom.jp"
+  },
+  "homepage": "https://github.com/bbcom/bbcom-shop-search-mcp-server",
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/server-bundled.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["dist/server-bundled.js"],
+      "env": {}
+    }
+  },
+  "keywords": [
+    "mcp",
+    "miyakojima",
+    "okinawa",
+    "search",
+    "shops",
+    "restaurants",
+    "jobs"
+  ],
+  "license": "ISC"
+}

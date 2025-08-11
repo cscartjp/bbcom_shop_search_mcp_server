@@ -11,7 +11,12 @@
     "test:tools": "tsx scripts/test-tools.ts",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "start:mcp": "node -r dotenv/config dist/server.cjs"
+    "start:mcp": "node -r dotenv/config dist/server.cjs",
+    "build:optimized": "esbuild src/mcp/server.ts --bundle --platform=node --format=cjs --outfile=dist/server-bundled.js --minify --tree-shaking=true",
+    "dxt:pack": "npm run build && npx @anthropic-ai/dxt pack",
+    "dxt:pack:optimized": "npm run build:optimized && npm run dxt:create-optimized",
+    "dxt:create-optimized": "node scripts/create-optimized-dxt.cjs",
+    "dxt:validate": "npx @anthropic-ai/dxt validate"
   },
   "keywords": [
     "mcp",
@@ -24,13 +29,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@modelcontextprotocol/sdk": "^1.17.2",
     "@prisma/client": "^5.22.0",
     "dotenv": "^16.4.7",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@anthropic-ai/dxt": "^0.2.6",
     "@types/node": "^22.10.5",
+    "archiver": "^7.0.1",
     "esbuild": "^0.24.2",
     "prisma": "^5.22.0",
     "tsx": "^4.19.2",
