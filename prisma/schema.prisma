@@ -1,0 +1,78 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis]
+}
+
+model CitadelaItem {
+  id                Int      @id @default(autoincrement())
+  itemId            Int      @unique @map("item_id")
+  slug              String   @unique
+  link              String?
+
+  // Content fields
+  title             String
+  subtitle          String?
+  content           String?  @db.Text
+  status            String   @default("publish")
+  author            Int      @default(1)
+
+  // Location fields
+  latitude          Float?
+  longitude         Float?
+  location          Unsupported("geography(Point, 4326)")?
+  address           String?
+
+  // Categorization
+  categories        String[]
+  tags              String[]
+
+  // Metadata
+  featuredImage     Int?
+  galleryImages     Int[]
+  openingHours      Json?
+  phoneNumber       String?
+  telephoneNumber   String?
+  email             String?
+  showEmail         Boolean  @default(true)
+  web               String?
+  showWeb           Boolean  @default(true)
+  socialIcons       Json?
+  features          String[]
+  customFields      Json?
+
+  // Timestamps
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  publishedAt       DateTime @default(now()) @map("published_at")
+
+  @@index([categories], type: Gin)
+  @@index([tags], type: Gin)
+  @@index([location], type: Gist)
+  @@map("citadela_items")
+}
+
+model Landmark {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  nameKana     String?  @map("name_kana")
+  nameEnglish  String?  @map("name_english")
+  category     String
+  latitude     Float
+  longitude    Float
+  location     Unsupported("geography(Point, 4326)")?
+  address      String?
+  description  String?
+
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@index([location], type: Gist)
+  @@map("landmarks")
+}

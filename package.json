@@ -1,0 +1,38 @@
+{
+  "name": "bbcom-shop-search-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for BBcom Shop Search in Miyakojima, Okinawa",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/mcp/server.ts",
+    "build": "esbuild src/mcp/server.ts --bundle --platform=node --outfile=dist/server.js --external:@prisma/client --external:pg",
+    "test:connection": "tsx scripts/test-connection.ts",
+    "test:tools": "tsx scripts/test-tools.ts",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "mcp",
+    "miyakojima",
+    "okinawa",
+    "search",
+    "shops",
+    "restaurants"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@prisma/client": "^5.22.0",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "esbuild": "^0.24.2",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
