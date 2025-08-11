@@ -6,11 +6,12 @@
   "type": "module",
   "scripts": {
     "dev": "tsx src/mcp/server.ts",
-    "build": "esbuild src/mcp/server.ts --bundle --platform=node --outfile=dist/server.js --external:@prisma/client --external:pg",
+    "build": "esbuild src/mcp/server.ts --bundle --platform=node --format=cjs --outfile=dist/server.cjs --external:@prisma/client --external:pg",
     "test:connection": "tsx scripts/test-connection.ts",
     "test:tools": "tsx scripts/test-tools.ts",
     "lint": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start:mcp": "node -r dotenv/config dist/server.cjs"
   },
   "keywords": [
     "mcp",
