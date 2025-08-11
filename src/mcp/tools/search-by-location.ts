@@ -52,7 +52,7 @@ export async function searchByLocation(
     const currentTime = now.toTimeString().slice(0, 5);
     
     // This is a simplified check - in production you'd parse opening_hours JSON properly
-    whereConditions.push(`opening_hours IS NOT NULL`);
+    whereConditions.push(`"openingHours" IS NOT NULL`);
   }
 
   const whereClause = whereConditions.join(' AND ');
@@ -69,9 +69,9 @@ export async function searchByLocation(
       categories,
       tags,
       status,
-      "opening_hours" as "openingHours",
-      "phone_number" as "phoneNumber",
-      "telephone_number" as "telephoneNumber",
+      "openingHours",
+      "phoneNumber",
+      "telephoneNumber",
       email,
       web,
       "created_at" as "createdAt",

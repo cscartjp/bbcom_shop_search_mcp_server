@@ -1,10 +1,10 @@
 # BBcom Shop Search MCP Server
 
-宮古島の店舗・求人情報を検索するためのModel Context Protocol (MCP)サーバー実装です。
+宮古島の店舗・求人情報を検索するための Model Context Protocol (MCP)サーバー実装です。
 
 ## 概要
 
-このMCPサーバーは、宮古島の店舗、レストラン、求人情報などのデータベースに対して、AI アシスタント（Claude等）から自然言語でアクセスできるインターフェースを提供します。
+この MCP サーバーは、宮古島の店舗、レストラン、求人情報などのデータベースに対して、AI アシスタント（Claude 等）から自然言語でアクセスできるインターフェースを提供します。
 
 ## 機能
 
@@ -12,13 +12,13 @@
 
 1. **searchByCategory** - カテゴリー別検索（位置情報によるソート対応）
 2. **searchByLocation** - 位置情報ベースの半径検索
-3. **searchByTags** - タグによる検索（AND/OR条件）
+3. **searchByTags** - タグによる検索（AND/OR 条件）
 4. **searchByText** - フリーテキスト検索
-5. **getItemById** - ID指定による詳細情報取得
+5. **getItemById** - ID 指定による詳細情報取得
 
 ### 主な特徴
 
-- PostGISを使用した高速な地理空間検索
+- PostGIS を使用した高速な地理空間検索
 - 宮古島の主要ランドマークデータベース内蔵
 - 営業時間による絞り込み対応
 - ページネーション対応
@@ -28,35 +28,40 @@
 
 ### 必要要件
 
-- Node.js 18以上
-- PostgreSQL 14以上（PostGIS拡張必須）
+- Node.js 18 以上
+- PostgreSQL 14 以上（PostGIS 拡張必須）
 - npm または yarn
 
 ### インストール手順
 
 1. リポジトリのクローン
+
 ```bash
 git clone <repository-url>
 cd bbcom_shop_search_mcp_server
 ```
 
 2. 依存関係のインストール
+
 ```bash
 npm install
 ```
 
 3. 環境変数の設定
+
 ```bash
 cp .env.example .env
 # .envファイルを編集してDATABASE_URLを設定
 ```
 
-4. Prismaクライアントの生成
+4. Prisma クライアントの生成
+
 ```bash
 npx prisma generate
 ```
 
 5. データベースマイグレーション
+
 ```bash
 npx prisma migrate dev
 ```
@@ -85,9 +90,9 @@ npm run test:connection
 npm run test:tools
 ```
 
-## Claude Desktopとの統合
+## Claude Desktop との統合
 
-Claude Desktopの設定ファイル（`~/Library/Application Support/Claude/claude_desktop_config.json`）に以下を追加：
+Claude Desktop の設定ファイル（`~/Library/Application Support/Claude/claude_desktop_config.json`）に以下を追加：
 
 ```json
 {
@@ -106,6 +111,7 @@ Claude Desktopの設定ファイル（`~/Library/Application Support/Claude/clau
 ## データベーススキーマ
 
 主要テーブル：
+
 - `citadela_items` - 店舗・求人情報
 - `landmarks` - 宮古島のランドマーク情報
 
@@ -133,10 +139,10 @@ Claude Desktopの設定ファイル（`~/Library/Application Support/Claude/clau
 
 - `npm run dev` - 開発サーバー起動
 - `npm run build` - プロダクションビルド
-- `npm run test:connection` - DB接続テスト
+- `npm run test:connection` - DB 接続テスト
 - `npm run test:tools` - ツールテスト
-- `npm run lint` - TypeScript型チェック
-- `npm run typecheck` - TypeScript型チェック
+- `npm run lint` - TypeScript 型チェック
+- `npm run typecheck` - TypeScript 型チェック
 
 ## ライセンス
 
@@ -144,4 +150,4 @@ ISC
 
 ## サポート
 
-問題や質問がある場合は、GitHubのIssueセクションに報告してください。
+問題や質問がある場合は、GitHub の Issue セクションに報告してください。
