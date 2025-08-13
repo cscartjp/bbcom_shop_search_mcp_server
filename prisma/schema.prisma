@@ -9,6 +9,18 @@ datasource db {
   extensions = [postgis]
 }
 
+model citadela_categories {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String?  @unique
+  description String?
+  item_count  Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime
+
+  @@index([name])
+}
+
 model citadela_items {
   id                 Int                       @id @default(autoincrement())
   item_id            Int                       @unique
