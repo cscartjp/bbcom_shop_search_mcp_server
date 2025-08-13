@@ -24,6 +24,12 @@ import { searchByLocation } from './tools/search-by-location.js';
 import { searchByTags } from './tools/search-by-tags.js';
 import { searchByText } from './tools/search-by-text.js';
 import { getItemById } from './tools/get-item-by-id.js';
+import { 
+  listCategories, 
+  checkCategory,
+  listCategoriesSchema,
+  checkCategorySchema
+} from './tools/categoryTools.js';
 
 // Load environment variables
 dotenv.config();
@@ -285,6 +291,53 @@ const TOOLS: Tool[] = [
       },
       required: ['itemId']
     }
+  },
+  {
+    name: 'listCategories',
+    description: 'Get a list of available categories (default: top 10 by item count)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        includeCount: {
+          type: 'boolean',
+          description: 'Include item count for each category',
+          default: true
+        },
+        orderBy: {
+          type: 'string',
+          description: 'Sort order for categories',
+          enum: ['name', 'item_count', 'created_at'],
+          default: 'item_count'
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum number of categories to return',
+          minimum: 1,
+          maximum: 100,
+          default: 10
+        }
+      }
+    }
+  },
+  {
+    name: 'checkCategory',
+    description: 'Check if a specific category exists in the database',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          description: 'Category name to check',
+          minLength: 1
+        },
+        fuzzy: {
+          type: 'boolean',
+          description: 'Use fuzzy matching for category name',
+          default: false
+        }
+      },
+      required: ['name']
+    }
   }
 ];
 
@@ -356,6 +409,32 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'getItemById': {
         const params = getItemByIdSchema.parse(args);
         const result = await getItemById(prisma, params);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2)
+            }
+          ]
+        };
+      }
+
+      case 'listCategories': {
+        const params = listCategoriesSchema.parse(args);
+        const result = await listCategories(params);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2)
+            }
+          ]
+        };
+      }
+
+      case 'checkCategory': {
+        const params = checkCategorySchema.parse(args);
+        const result = await checkCategory(params);
         return {
           content: [
             {

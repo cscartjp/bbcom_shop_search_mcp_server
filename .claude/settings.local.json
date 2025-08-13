@@ -12,7 +12,9 @@
       "WebFetch(domain:www.anthropic.com)",
       "mcp__serena__create_text_file",
       "mcp__mcp-gemini-cli__googleSearch",
-      "WebFetch(domain:modelcontextprotocol.io)"
+      "WebFetch(domain:modelcontextprotocol.io)",
+      "mcp__serena__find_symbol",
+      "mcp__serena__activate_project"
     ],
     "deny": []
   }

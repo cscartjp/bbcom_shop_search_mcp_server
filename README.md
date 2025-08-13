@@ -10,11 +10,16 @@
 
 ### 提供ツール
 
+#### 検索ツール
 1. **searchByCategory** - カテゴリー別検索（位置情報によるソート対応）
 2. **searchByLocation** - 位置情報ベースの半径検索
 3. **searchByTags** - タグによる検索（AND/OR 条件）
 4. **searchByText** - フリーテキスト検索
 5. **getItemById** - ID 指定による詳細情報取得
+
+#### カテゴリー管理ツール
+6. **listCategories** - 利用可能なカテゴリー一覧の取得
+7. **checkCategory** - 特定カテゴリーの存在確認と類似候補の提案
 
 ### 主な特徴
 
@@ -140,6 +145,7 @@ Claude Desktop の設定ファイル（`~/Library/Application Support/Claude/cla
 主要テーブル：
 
 - `citadela_items` - 店舗・求人情報
+- `citadela_categories` - カテゴリーマスター
 - `landmarks` - 宮古島のランドマーク情報
 
 詳細は`prisma/schema.prisma`を参照してください。
